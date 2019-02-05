@@ -1,0 +1,58 @@
+<form action="#" id="form-profile" class="mt-4" method="POST" role="form" (ngSubmit)="changeNameAndEmail()"
+  #emailForm="ngForm" novalidate>
+  <legend>Edit profile</legend>
+  <div class="form-group">
+    <label for="correo">Email:</label>
+    <input type="email" class="form-control" name="email" id="email" placeholder="Email"
+      [(ngModel)]="user.email" #emailModel="ngModel" required>
+     <p class="text-danger" *ngIf="emailModel.touched && emailModel.invalid">
+       Email is required
+     </p>
+    <label for="name">Name:</label>
+    <input type="text" class="form-control" name="nameUser" id="name" placeholder="Name"
+    [(ngModel)]="user.name" #nameModel="ngModel" required>
+    <p class="text-danger" *ngIf="nameModel.touched && nameModel.invalid">
+      Name is required
+    </p>
+  </div>
+  <button type="submit" class="btn btn-primary" [disabled]="emailForm.invalid">Edit profile</button>
+</form>
+
+<form action="#" id="form-avatar" class="mt-4" method="POST" role="form" (ngSubmit)="changeAvatar()" #avatarForm="ngForm" novalidate>
+  <legend>Edit avatar</legend>
+
+  <div class="form-group">
+      <input type="file" class="form-control" id="image" name="image" #fileImage (change)="changeImage(fileImage)">
+  </div>
+  <div class="row">
+    <div class="col">
+        <img id="avatar" [src]="user.avatar" alt="">
+    </div>
+    <div class="col">
+        <img [src]="nuevoAvatar" alt="" id="imgPreview" *ngIf="fileImage.files.length">
+    </div>
+  </div>
+  <p class="text-danger" id="errorInfo2"></p>
+  <p class="text-success" id="okInfo2"></p>
+  <button type="submit" class="btn btn-primary" [disabled]="!fileImage.files.length">Edit avatar</button>
+</form>
+
+<form action="#" id="form-password" class="mt-4" method="POST" role="form"
+  (ngSubmit)="changePassword()" #passwordForm="ngForm" novalidate>
+  <legend>Edit password</legend>
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input type="password" class="form-control" name="password" id="password" placeholder="Password"
+      [(ngModel)]="password1" #pass1Model="ngModel" required>
+    <label for="password2">Repeat password:</label>
+    <input type="password" class="form-control" name="password2" id="password2" placeholder="Repeat password"
+      [(ngModel)]="password2" #pass2Model="ngModel" required>
+  </div>
+  <p class="text-danger" *ngIf="passwordForm.touched && passwordForm.invalid">
+    Password and repeat it please
+  </p>
+  <p class="text-danger" *ngIf="passwordForm.touched && (password1 !== password2)">
+    Passwords do not match
+  </p>
+  <button type="submit" class="btn btn-primary" [disabled]="(password1 !== password2) || passwordForm.invalid">Edit password</button>
+</form>

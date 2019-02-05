@@ -1,0 +1,34 @@
+
+  <div id="cardContainer" class="mt-4">
+    <fs-restaurant-card  class="card"
+      [restaurant]="restaurant">
+    </fs-restaurant-card>
+  </div>
+
+  <div class="card mt-4">
+    <div class="card-header" id="address">{{restaurant.address}}</div>
+      <mgl-map [style]="'mapbox://styles/mapbox/streets-v11'"
+        [zoom]="[zoom]" [center]="[restaurant.lng, restaurant.lat]">
+        <mgl-marker [lngLat]="[restaurant.lng, restaurant.lat]"></mgl-marker>
+      </mgl-map>
+  </div>
+
+  <ul class="list-group mt-4 mb-4" id="comments">
+    <li class="list-group-item active">Restaurant comments</li>
+    <fs-restaurant-comment  *ngFor="let comm of comments"
+      [restComment]="comm">
+    </fs-restaurant-comment>
+  </ul>
+
+  <form action="#" class="mt-4" id="commentForm" *ngIf="!restaurant.commented" (ngSubmit)="addComment()" #commentForm="ngForm" novalidate>
+    <h4>Write about this restaurant:</h4>
+    <div class="form-group">
+      <textarea class="form-control" name="comment" id="comment" placeholder="Write an opinion"
+        [(ngModel)]="newComment.text" #commentModel="ngModel"
+        [ngClass]="{'is-valid': newComment.text && commentModel.touched, 'is-invalid': commentModel.touched && commentModel.invalid}" required>
+      </textarea>
+    </div>
+    <fs-star-rating [rating]="newComment.stars" (changeRating)="changeRating($event)"></fs-star-rating>
+    <button type="submit" class="btn btn-primary mt-3" [disabled]="commentForm.invalid">Send</button>
+  </form>
+

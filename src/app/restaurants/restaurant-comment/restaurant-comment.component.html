@@ -1,0 +1,13 @@
+<li class="list-group-item d-flex flex-row">
+    <div class="float-left">
+        <a href="" [routerLink]="['/users/profile/', restComment.user.id]"><img class="rounded-circle mr-3" style="width: 40px;" [src]="restComment.user.avatar" alt=""></a>
+    </div>
+    <div>
+      <div><strong><a href="" [routerLink]="['/users/profile/', restComment.user.id]">{{restComment.user.name}}</a>: </strong>{{restComment.text}}</div>
+      <div>
+          <i class="fas fa-star" *ngFor="let fullStar of fullStars"></i>
+          <i class="far fa-star" *ngFor="let emptyStar of emptyStars"></i>
+      </div>
+      <small>{{restComment.date}}</small>
+    </div>
+</li>

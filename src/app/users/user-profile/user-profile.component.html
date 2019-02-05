@@ -1,0 +1,25 @@
+<div id="profile">
+  <div class="row mt-4">
+    <div class="col-3">
+      <img class="w-100" id="avatar" [src]="user.avatar" alt="">
+    </div>
+    <div class="col-9">
+      <h4>{{user.name}}</h4>
+      <h4>
+        <small class="text-muted">{{user.email}}</small>
+      </h4>
+      <p>
+        <a *ngIf="user.me" href="" [routerLink]="['/users/profile/edit']" class="btn btn-primary">Edit profile</a>
+      </p>
+      <p>
+        <a *ngIf="!user.me" href="" [routerLink]="['/restaurants/user', user.id]" class="btn btn-dark">View user´s restaurants</a>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="mt-4" id="map">
+  <mgl-map [style]="'mapbox://styles/mapbox/streets-v11'"
+      [zoom]="[zoom]" [center]="[user.lng, user.lat]">
+      <mgl-marker [lngLat]="[user.lng, user.lat]"></mgl-marker>
+  </mgl-map>
+</div>

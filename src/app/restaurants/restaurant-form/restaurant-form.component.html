@@ -1,0 +1,87 @@
+<form action="#" class="mt-4" (ngSubmit)="addRestaurant()" #addForm="ngForm" id="newPlace" novalidate>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" name="name" [(ngModel)]="newRest.name" id="name" placeholder="Enter name"
+      minlength="5" required #nameModel="ngModel" [ngClass]="validClasses(nameModel, 'is-valid', 'is-invalid')">
+      <div *ngIf="nameModel.touched && nameModel.invalid"
+        class="alert alert-danger">
+          Name is required width minimun length of 5 and can only contain letters and spaces.
+      </div>
+      <!--<div *ngIf="nameModel.touched && nameModel.invalid" ngclass="invalid-feedback">Name is required and can only contain letters and spaces.</div>-->
+  </div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea class="form-control" id="description" name="description" [(ngModel)]="newRest.description" rows="3" placeholder="Description"
+      required #descModel="ngModel" [ngClass]="validClasses(descModel, 'is-valid', 'is-invalid')"></textarea>
+    <div *ngIf="descModel.touched && descModel.invalid"
+      class="alert alert-danger">
+        Description is required.
+    </div>
+    <!--<div class="invalid-feedback">Description is required.</div>-->
+  </div>
+  <div class="form-group">
+    <label for="cuisine">Cuisine</label>
+    <input type="text" class="form-control" name="cuisine" [(ngModel)]="cuisine" id="cuisine" placeholder="Cuisine"
+      required #cuisineModel="ngModel" [ngClass]="validClasses(cuisineModel, 'is-valid', 'is-invalid')">
+    <div *ngIf="cuisineModel.touched && cuisineModel.invalid"
+      class="alert alert-danger">
+        Cuisine is required.
+    </div>
+    <!--<div class="invalid-feedback">Cuisine is required.</div>-->
+  </div>
+  <p>Opening days</p>
+  <div class="form-group" ngModelGroup="daysGroup" #daysModel="ngModelGroup" fsOneChecked>
+      <div class="custom-control custom-control-inline custom-checkbox" *ngFor="let day of days; let i = index">
+        <input type="checkbox" class="custom-control-input" id="checkDay{{i}}"
+          name="days{{i}}" [(ngModel)]="daysOpen[i]">
+        <label class="custom-control-label" for="checkDay{{i}}">{{day}}</label>
+      </div>
+      <div *ngIf="daysModel.invalid" class="alert alert-danger">
+        You must choose at least 1 day.
+      </div>
+    <!--<div class="text-danger d-none" id="daysError"><small>You must choose at least 1 day.</small></div>-->
+  </div>
+  <div class="form-group">
+    <label for="phone">Phone number</label>
+    <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="newRest.phone" pattern="(\+?[0-9]2 ?)?[0-9]{9}" placeholder="Phone number"
+      required #phoneModel="ngModel" [ngClass]="validClasses(phoneModel, 'is-valid', 'is-invalid')">
+    <div *ngIf="phoneModel.touched && phoneModel.invalid"
+      class="alert alert-danger">
+        You must write a phone (optional prefix).
+    </div>
+    <!--<div class="invalid-feedback">You must write a phone (optional prefix).</div>-->
+  </div>
+  <div class="form-group mt-4">
+    <label for="image">Main photo</label>
+    <input type="file" class="form-control" #fileImage (change)="changeImage(fileImage)" name="image"
+      [ngClass]="{'is-valid': newRest.image,
+       'is-invalid': !newRest.image}">
+    <!--<div class="invalid-feedback">An image is required.</div>-->
+  </div>
+
+  <div class="my-2" *ngIf="edit && !fileImage.files.length">Previous image: </div>
+  <img [src]="newRest.image" alt="" class="img-thumbnail">
+
+  <div class="form-group">
+      <label for="address">Address</label>
+      <input type="text" class="form-control" id="address" name="address"
+        #addressModel="ngModel" [(ngModel)]="newRest.address"
+        [ngClass]="{'is-valid': newRest.address,
+       'is-invalid': !newRest.address}" required readonly>
+      <div *ngIf="addressModel.invalid"
+        class="alert alert-danger">
+          Address is required. Try in the search box:
+      </div>
+  </div>
+
+
+  <mgl-map [style]="'mapbox://styles/mapbox/streets-v11'"
+    [zoom]="[zoom]" [center]="[newRest.lng, newRest.lat]">
+    <mgl-marker [lngLat]="[newRest.lng, newRest.lat]"></mgl-marker>
+    <mgl-control mglGeocoder (result)="changePosition($event.result)"></mgl-control>
+  </mgl-map>
+
+  <button type="submit" class="btn btn-primary mt-4 my-4" [disabled]="addForm.invalid
+   || !newRest.image">{{edit?'Edit restaurant':'Create restaurant'}}</button>
+  <button type="button" class="btn btn-danger ml-2 mt-4 my-4" (click)="cancelForm()"> Cancel</button>
+</form>
